@@ -18,6 +18,7 @@ import com.clps.sms.sys.dao.AccountDao;
 import com.clps.sms.sys.model.Account;
 import com.clps.sms.util.MD5Utils;
 import com.clps.sms.util.date.StringtoDate;
+import com.clps.sms.util.db.BaseDaoImpl;
 import com.clps.sms.util.db.DBConnection;
 
 /**
@@ -80,9 +81,7 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 //	通过ID删除
 	private static final String deleteAccountById="UPDATE ACCOUNT SET ACC_STATUS=0 WHERE ACC_ID=?";	
 	
-	private PreparedStatement ps = null;
-	private ResultSet rs = null;
-	private Account account = null;
+	
 	private List<Account> listAccount =null;
 	private boolean flag = false;
 	private int row =0;
@@ -101,10 +100,8 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 	@Override
 	public List<Account> queryAllAccounts() throws SQLException {
-		this.ps = super.getConnection().prepareStatement(SELECTALLACCOUNTS);
-		this.rs = ps.executeQuery();
-		setListOfAccount(rs);
-		logger.info("listOfAccount size: "+listAccount.size());
+		
+		listAccount=BaseDaoImpl.query(SELECTALLACCOUNTS, null, Account.class );
 		return listAccount;
 	}
 
@@ -119,12 +116,8 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 	@Override
 	public List<Account> queryAllAccountByCondition(int cond)throws SQLException {
-		this.ps = super.getConnection().prepareStatement(SELECTALLACCOUNTSBYCONDECTION);
-		ps.setInt(1, cond);
-		this.rs = ps.executeQuery();
-		setListOfAccount(rs);
-		logger.info("queryAllAccountByCondition listOfAccount size: "+listAccount.size());
-		super.getClose();
+
+		listAccount=BaseDaoImpl.query(SELECTALLACCOUNTSBYCONDECTION, new Object[]{cond}, Account.class );
 		return listAccount;
 	}
 
@@ -136,12 +129,9 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 	@Override
 	public boolean queryAccountByMobile(String acc_mobile)throws SQLException {
-		this.ps=super.getConnection().prepareStatement(SELECTALLACCOUNTSBYMOBILE);
-		ps.setString(1,acc_mobile);
-		rs=ps.executeQuery();
-		flag=showcheckres(rs);
-		logger.info("queryAccountByName checkMobile:"+flag);
-		super.getClose();
+
+		listAccount=BaseDaoImpl.query(SELECTALLACCOUNTSBYMOBILE, new Object[]{acc_mobile}, Account.class );
+		flag=BaseDaoImpl.showcheckres(listAccount);
 		return flag;
 	}
 
@@ -152,12 +142,9 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 	@Override
 	public boolean queryAccountByName(String acc_name) throws SQLException{
-		this.ps=super.getConnection().prepareStatement(SELECTALLACCOUNTSBYNAME);
-		ps.setString(1,acc_name);
-		rs=ps.executeQuery();
-		flag=showcheckres(rs);
-		logger.info("queryAccountByName checkName:"+flag);
-		super.getClose();
+
+		listAccount=BaseDaoImpl.query(SELECTALLACCOUNTSBYNAME, new Object[]{acc_name}, Account.class );
+		flag=BaseDaoImpl.showcheckres(listAccount);
 		return flag;
 	}
 
@@ -170,25 +157,13 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 
 	@Override
-	public boolean updateAccountById(Account acc, Integer acc_id)throws SQLException {
-		this.ps=super.getConnection().prepareStatement(updateAccountById);
+	public boolean updateAccountById(Account acc)throws SQLException {
+		Object[] obj={acc.getAcc_name(),MD5Utils.getPwd(acc.getAcc_password()),acc.getAcc_email(),
+				acc.getAcc_mobile(),acc.getAcc_dec(),acc.getAcc_status(),acc.getAcc_updated_datatime(),
+				acc.getAcc_updated_name(),acc.getAcc_role_id(),acc.getAcc_id()};
 		
-		ps.setString(1, acc.getAcc_name());
-//		密码加密
-		String pwd=MD5Utils.getPwd(acc.getAcc_password());
-		ps.setString(2, pwd);
-		ps.setString(3, acc.getAcc_email());
-		ps.setString(4, acc.getAcc_mobile());
-		ps.setString(5, acc.getAcc_dec());
-		ps.setInt(6, acc.getAcc_status());
-		ps.setString(7, acc.getAcc_updated_date());
-		ps.setInt(8, acc.getAcc_updated_name());
-		ps.setInt(9, acc.getAcc_role_id());
-		ps.setInt(10, acc_id);
-		row=ps.executeUpdate();
-		flag=showopreult(row);
-		logger.info("updateAccountById is"+flag);
-		super.getClose();
+		flag=BaseDaoImpl.update(updateAccountById, obj);
+		
 		return flag;
 	}
 
@@ -199,12 +174,8 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	 */
 	@Override
 	public boolean deleteAccountById (Integer acc_id) throws SQLException{
-		this.ps=super.getConnection().prepareStatement(deleteAccountById);
-		ps.setInt(1, acc_id);
-		row=ps.executeUpdate();
-		flag=showopreult(row);
-		logger.info("deleteAccountById  is "+flag);
-		super.getClose();
+		
+		flag=BaseDaoImpl.update(deleteAccountById, new Object[]{acc_id});
 		return flag;
 	}
 	
@@ -215,91 +186,13 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	@Override
 	public boolean insertAccount(Account acc) throws SQLException {
 		
-		this.ps =super.getConnection().prepareStatement(INSERTACCOUNT);
+		Object[] obj={acc.getAcc_name(),acc.getAcc_email(),acc.getAcc_mobile(),
+				acc.getAcc_dec(),acc.getAcc_status(),acc.getAcc_created_datatime(),
+				acc.getAcc_created_name(),acc.getAcc_role_id()};
+		flag=BaseDaoImpl.update(INSERTACCOUNT, obj);
 		
-		ps.setString(1,acc.getAcc_name());
-		ps.setString(2,acc.getAcc_email());
-		ps.setString(3,acc.getAcc_mobile());
-		ps.setString(4,acc.getAcc_dec());
-		ps.setInt(5,acc.getAcc_status());
-		ps.setString(6,acc.getAcc_created_date());
-		ps.setInt(7,acc.getAcc_created_name());
-		ps.setInt(8,acc.getAcc_role_id());
-		
-		row= ps.executeUpdate();
-		flag=showopreult(row);
-		logger.info("insertAccount is"+flag);
-		super.getClose();
 		return flag ;
 	}
 	
-	
-	/**
-	 * 
-	 * setListOfAccount:将查询的语句打印到list集合中
-	 *
-	 * @author wqeq
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 * @since JDK 1.8
-	 */
-	private List<Account> setListOfAccount(ResultSet rs) throws SQLException{
-		
-		while(rs.next()){
-			this.account  = new Account();
-			
-			account.setAcc_id(rs.getInt("acc_id"));
-			account.setAcc_name(rs.getString("acc_name"));
-			account.setAcc_mobile(rs.getString("acc_mobile"));
-			account.setAcc_email(rs.getString("acc_email"));
-			account.setAcc_dec(rs.getString("acc_dec"));
-			account.setAcc_created_date(rs.getString("acc_created_datatime"));
-			account.setAcc_created_name(rs.getInt("acc_created_name"));
-			account.setAcc_updated_date(rs.getString("acc_update_datatime"));
-			account.setAcc_updated_name(rs.getInt("acc_update_name"));
-			account.setAcc_role_id(rs.getInt("acc_role_id"));
-			
-			listAccount.add(account);
-		}
-		return listAccount;
-	}
-	
-	
-	/**
-	 * 
-	 * showflag:判断返回值是true还是false
-	 *
-	 * @author wqeq
-	 * @param row
-	 * @return
-	 * @since JDK 1.8
-	 */
-	public  boolean showopreult( int row){
-		if(row>0){
-			flag = true;
-		}else{
-			flag =false;
-		}
-		return flag;
-		
-	}
-	
-	/**
-	 *
-	 *desc:验证手机和用户名是否已存在
-	 * @author wqeq
-	 * @return
-	 * @throws SQLException 
-	 * @since JDK 1.8
-	 */
-	public boolean showcheckres(ResultSet rs) throws SQLException{
-		if(rs.first()==false){
-			flag=true;
-		}else{
-			flag=false;
-		}
-		return flag;
-	}
 
 }

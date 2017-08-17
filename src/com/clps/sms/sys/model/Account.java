@@ -33,9 +33,9 @@ public class Account implements Serializable, Comparator<Account> {
 	private String acc_mobile; // ACC_MOBILE
 	private String acc_dec; // ACC_DEC
 	private Integer acc_status; // ACC_STATUS
-	private String acc_created_date;
+	private String acc_created_datatime;
 	private Integer acc_created_name;
-	private String acc_updated_date;
+	private String acc_updated_datatime;
 	private Integer acc_updated_name;
 	private Integer acc_role_id;
 	public final Integer getAcc_id() {
@@ -80,11 +80,12 @@ public class Account implements Serializable, Comparator<Account> {
 	public final void setAcc_status(Integer acc_status) {
 		this.acc_status = acc_status;
 	}
-	public final String getAcc_created_date() {
-		return acc_created_date;
+	
+	public final String getAcc_created_datatime() {
+		return acc_created_datatime;
 	}
-	public final void setAcc_created_date(String acc_created_date) {
-		this.acc_created_date = acc_created_date;
+	public final void setAcc_created_datatime(String acc_created_datatime) {
+		this.acc_created_datatime = acc_created_datatime;
 	}
 	public final Integer getAcc_created_name() {
 		return acc_created_name;
@@ -92,11 +93,12 @@ public class Account implements Serializable, Comparator<Account> {
 	public final void setAcc_created_name(Integer acc_created_name) {
 		this.acc_created_name = acc_created_name;
 	}
-	public final String getAcc_updated_date() {
-		return acc_updated_date;
+	
+	public final String getAcc_updated_datatime() {
+		return acc_updated_datatime;
 	}
-	public final void setAcc_updated_date(String acc_updated_date) {
-		this.acc_updated_date = acc_updated_date;
+	public final void setAcc_updated_datatime(String acc_updated_datatime) {
+		this.acc_updated_datatime = acc_updated_datatime;
 	}
 	public final Integer getAcc_updated_name() {
 		return acc_updated_name;
@@ -114,6 +116,17 @@ public class Account implements Serializable, Comparator<Account> {
 		return serialVersionUID;
 	}
 	
+	
+	
+	
+	@Override
+	public String toString() {
+		return "Account [acc_id=" + acc_id + ", acc_name=" + acc_name + ", acc_password=" + acc_password
+				+ ", acc_email=" + acc_email + ", acc_mobile=" + acc_mobile + ", acc_dec=" + acc_dec + ", acc_status="
+				+ acc_status + ", acc_created_datatime=" + acc_created_datatime + ", acc_created_name="
+				+ acc_created_name + ", acc_updated_datatime=" + acc_updated_datatime + ", acc_updated_name="
+				+ acc_updated_name + ", acc_role_id=" + acc_role_id + "]";
+	}
 	@Override
 	public int compare(Account arg0, Account arg1) {
 		// TODO Auto-generated method stub

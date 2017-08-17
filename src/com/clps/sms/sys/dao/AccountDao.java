@@ -54,7 +54,7 @@ public interface AccountDao {
 	 * @param acc_id
 	 * @return
 	 */
-	public boolean updateAccountById(Account acc,Integer acc_id)throws SQLException;
+	public boolean updateAccountById(Account acc)throws SQLException;
 	/**
 	 * desc:
 	 * 		

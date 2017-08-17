@@ -7,7 +7,7 @@
  *
 */
 
-package com.clps.sms.sys.dao.impl;
+package com.clps.sms.util.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
-
-import com.clps.sms.util.db.DBConnection;
 
 /**
  * ClassName:BaseDao <br/>
@@ -44,17 +42,18 @@ public class BaseDaoImpl {
 
 
 	    // 初始化参数
-	    private Connection con;
-	    private PreparedStatement pstmt;
-	    private ResultSet rs;
-
+	    private static Connection con;
+	    private static PreparedStatement pstmt;
+	    private static ResultSet rs;
+	    private static boolean flag=false;
+	    private static int row=0;
 
 	    /**
 	     * 查询的通用方法
 	     * @param sql
 	     * @param paramsValue
 	     */
-	    public <T> List<T> query(String sql, Object[] paramsValue,Class<T> clazz){
+	    public static <T> List<T> query(String sql, Object[] paramsValue,Class<T> clazz){
 
 	        try {
 	            // 返回的集合
@@ -84,44 +83,35 @@ public class BaseDaoImpl {
 	            while (rs.next()) {
 	                // 要封装的对象
 	                t = clazz.newInstance();
-
+	          
 	                // 7. 遍历每一行的每一列, 封装数据
 	                for (int i=0; i<columnCount; i++) {
 	                    // 获取每一列的列名称
 	                    String columnName = rsmd.getColumnName(i + 1);
 	                                        // 获取每一列的列名称, 对应的值
 	                    Object value = rs.getObject(columnName);
+	                    
 	                    // 封装： 设置到t对象的属性中  【BeanUtils组件】
-	                    BeanUtils.copyProperty(t, columnName, value);               
+	                   BeanUtils.copyProperty(t, columnName.toLowerCase(), value);               
 	                }
 
 	                // 把封装完毕的对象，添加到list集合中
 	                list.add(t);
 	            }
-
+	            con.close();
+				pstmt.close();
+	        	rs.close();
 	            return list;
 	        } catch (Exception e) {
 	            throw new RuntimeException(e);
-	        } finally {
-	        	try {
-					con.close();
-					pstmt.close();
-		        	rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	        }
+	        } 
 	    }
-
-
-
 	    /**
 	     * 更新的通用方法
 	     * @param sql   更新的sql语句(update/insert/delete)
 	     * @param paramsValue  sql语句中占位符对应的值(如果没有占位符，传入null)
 	     */
-	    public void update(String sql,Object[] paramsValue){
+	    public static boolean update(String sql,Object[] paramsValue){
 
 	        try {
 	            // 获取连接
@@ -139,30 +129,50 @@ public class BaseDaoImpl {
 	                }
 	            }
 	            // 执行更新
-	            pstmt.executeUpdate();
-
+	              row= pstmt.executeUpdate();
+	              flag=showopreult(row);
+	            con.close();
+				pstmt.close();
 	        } catch (Exception e) {
 	            throw new RuntimeException(e);
-	        } finally {
-	           
-	            try {
-					con.close();
-					pstmt.close();
-		        	rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	            try {
-					con.close();
-					pstmt.close();
-		
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-//	          closeAll(con, pstmt, null);
 	        }
+			return flag; 
 	    }
+	    
+	    /**
+		 * 
+		 * showflag:判断返回值是true还是false
+		 *
+		 * @author wqeq
+		 * @param row
+		 * @return
+		 * @since JDK 1.8
+		 */
+		public static  boolean showopreult( int row){
+			if(row>0){
+				flag = true;
+			}else{
+				flag =false;
+			}
+			return flag;
+			
+		}
+		
+		/**
+		 *
+		 *desc:验证手机和用户名是否已存在
+		 * @author wqeq
+		 * @return
+		 * @throws SQLException 
+		 * @since JDK 1.8
+		 */
+		public static boolean showcheckres(List list) {
+			if(list.size()==0){
+				flag=true;
+			}else{
+				flag=false;
+			}
+			return flag;
+		}
 
 }

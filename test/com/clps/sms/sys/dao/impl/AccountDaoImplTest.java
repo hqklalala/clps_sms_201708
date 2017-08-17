@@ -58,8 +58,11 @@ public class AccountDaoImplTest {
 	 */
 	@Test
 	public void testQueryAllAccounts() throws Exception {
-		List list=SysFactory.getAccountInstance().queryAllAccounts();
-		System.out.println(list.size());
+		List<Account> list=SysFactory.getAccountInstance().queryAllAccounts();
+		for(Account a:list){
+			System.out.println("OOOOO"+a);
+		}
+		System.out.println(list.get(0));
 	}
 
 	/**
@@ -111,20 +114,20 @@ public class AccountDaoImplTest {
 	public void testUpdateAccountById() throws SQLException {
 		
 		Account acc=new Account();
-		
-		acc.setAcc_name("咔咔");
+		acc.setAcc_id(16);
+		acc.setAcc_name("糊糊");
 		acc.setAcc_password("234567");
 		acc.setAcc_email("123456789@qq.com");
 		acc.setAcc_mobile("15230535656");
 		acc.setAcc_dec("huhuihihiuhiuhi");
 		acc.setAcc_status(0);
 		String date=StringtoDate.datetoString(new Date());
-		acc.setAcc_updated_date(date);
+		acc.setAcc_updated_datatime(date);
 		acc.setAcc_updated_name(1);
 		acc.setAcc_role_id(2);
 		
 		AccountDao accountDao=new AccountDaoImpl();
-		boolean bool=accountDao.updateAccountById(acc, 16);
+		boolean bool=accountDao.updateAccountById(acc);
 		System.out.println(bool);
 //		fail("Not yet implemented");
 	}
@@ -152,7 +155,7 @@ public class AccountDaoImplTest {
 		acc.setAcc_dec("啦啦啦啦啦啦啦");
 		acc.setAcc_status(1);
 		String date=StringtoDate.datetoString(new Date());
-		acc.setAcc_created_date(date);
+		acc.setAcc_created_datatime(date);
 		acc.setAcc_created_name(1);
 		acc.setAcc_role_id(1);
 		
