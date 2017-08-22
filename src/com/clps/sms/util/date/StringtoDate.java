@@ -13,6 +13,7 @@ package com.clps.sms.util.date;
 
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 
 /**
  * ClassName:StringtoDate <br/>
- * Function: TODO ADD FUNCTION. <br/>
+ * Function: String与Date之间相互转换
  * Reason:	 TODO ADD REASON. <br/>
  * Date:     2017年8月15日 下午11:39:59 <br/>
  * @author   wqeq
@@ -29,27 +30,36 @@ import java.util.Date;
  * @see 	 
  */
 public class StringtoDate {
+	
 	/**
 	 * 
-	 * strtoDate:String转换为date类型
+	 * stringtoDate:String 装换成Date
 	 *
 	 * @author wqeq
 	 * @param str
-	 * @return Date date
+	 * @return Date
 	 * @throws ParseException
 	 * @since JDK 1.8
 	 */
-//	public static Date strtoDate(String str) throws ParseException {
-//		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-//		java.util.Date utilDate=sdf.parse(str);
-//		Date sqlDate=new java.sql.Date(utilDate.getTime());
-//		return sqlDate;
-//		
-//	}
+	public static  Date stringtoDate(String str) throws ParseException{
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Date date=sdf.parse(str);
+		return date;
+		
+	}
 	
+	/**
+	 * 
+	 * datetoString:Date转换成String
+	 *
+	 * @author wqeq
+	 * @param date
+	 * @return	String
+	 * @since JDK 1.8
+	 */
 	public static String datetoString(Date date){		
 		String dateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
-		
 		return dateStr;
 		
 	}

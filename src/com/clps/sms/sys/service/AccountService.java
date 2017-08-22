@@ -39,6 +39,7 @@ public interface AccountService {
 	 * @return List<Account>
 	 */
 	public List<Account> queryAllAccountByCondition(int cond);
+	
 	/**
 	 * desc:
 	 * 

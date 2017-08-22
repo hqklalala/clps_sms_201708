@@ -46,7 +46,9 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 	private static final String SELECTALLACCOUNTS = "SELECT "
 														+ strtemp
 														+" FROM ACCOUNT WHERE ACC_STATUS=1";
-//	插入数据
+	
+	
+	//	插入数据
 	private static final String INSERTACCOUNT="INSERT INTO ACCOUNT ("
 														+ "ACC_NAME,"
 														+ "ACC_EMAIL,"
@@ -120,7 +122,7 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 		listAccount=BaseDaoImpl.query(SELECTALLACCOUNTSBYCONDECTION, new Object[]{cond}, Account.class );
 		return listAccount;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * desc：验证手机唯一性
@@ -193,6 +195,8 @@ public class AccountDaoImpl extends DBConnection implements AccountDao {
 		
 		return flag ;
 	}
+
+	
 	
 
 }

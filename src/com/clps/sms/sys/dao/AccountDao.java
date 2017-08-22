@@ -31,6 +31,7 @@ public interface AccountDao {
 	 * @return List<Account>
 	 */
 	public List<Account> queryAllAccountByCondition(int cond)throws SQLException;
+	
 	/**
 	 * desc:
 	 * 
@@ -41,7 +42,6 @@ public interface AccountDao {
 	/**
 	 * desc:
 	 * 		
-	 * 
 	 * @param acc_name
 	 * @return boolean true: false:
 	 */

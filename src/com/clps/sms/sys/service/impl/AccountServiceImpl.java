@@ -67,6 +67,13 @@ public class AccountServiceImpl implements AccountService {
 		}
 		return null;
 	}
+	
+	/*@Override
+	public List<Account> queryAccountbynamepwd(String acc_name, String acc_pwd) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
 
 	@Override
 	public boolean queryAccountByMobile(String acc_mobile)   {
@@ -123,4 +130,5 @@ public class AccountServiceImpl implements AccountService {
 		return flag;
 	}
 
+	
 }
